@@ -63,65 +63,6 @@ function game() {
     let computerScore = 0;
     let playerScore = 0;
 
-    console.log('--- Round 1 ---');
-
-
-    let playerSelection = prompt("Rock, Paper or Scissors?");
-    let computerSelection = getComputerChoice();
-    let result = play(playerSelection, computerSelection);
-    if (result === 0) {
-        computerScore++;
-    } else if (result === 1) {
-        playerScore++;
-    }
-
-    console.log('--- Round 2 ---');
-    playerSelection = prompt("Rock, Paper or Scissors?");
-    computerSelection = getComputerChoice();
-
-    result = play(playerSelection, computerSelection);
-    if (result === 0) {
-        computerScore++;
-    } else if (result === 1) {
-        playerScore++;
-    }
-
-    console.log('--- Round 3 ---');
-
-    playerSelection = prompt("Rock, Paper or Scissors?");
-    computerSelection = getComputerChoice();
-
-    result = play(playerSelection, computerSelection);
-    if (result === 0) {
-        computerScore++;
-    } else if (result === 1) {
-        playerScore++;
-    }
-
-    console.log('--- Round 4 ---');
-
-    playerSelection = prompt("Rock, Paper or Scissors?");
-    computerSelection = getComputerChoice();
-
-    result = play(playerSelection, computerSelection);
-    if (result === 0) {
-        computerScore++;
-    } else if (result === 1) {
-        playerScore++;
-    }
-
-    console.log('--- Round 5 ---');
-
-    playerSelection = prompt("Rock, Paper or Scissors?");
-    computerSelection = getComputerChoice();
-
-    result = play(playerSelection, computerSelection);
-    if (result === 0) {
-        computerScore++;
-    } else if (result === 1) {
-        playerScore++;
-    }
-
     console.log('Game OVER!');
     console.log('Final result:');
     console.log('Player Score: ' + playerScore);
@@ -132,11 +73,17 @@ function game() {
             ? 'The Player'
             : (computerScore > playerScore
                 ? 'La Computadora'
-                : 'It\'s a focking tie bruv')    )    );
+                : 'It\'s a focking tie bruv')));
 
 
 }
 
 console.log('Okay bruv, \'ere we go')
 
-game();
+const playBtns = document.querySelectorAll('.selectionBtn');
+
+playBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        play(`${this.id}`, getComputerChoice());
+    });
+});
