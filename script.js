@@ -1,3 +1,6 @@
+let playerScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3);
     switch (choice) {
@@ -13,77 +16,87 @@ function getComputerChoice() {
 }
 
 function play(playerSelection, computerSelection) {
+    // It it returns 0, that means the player lost the round
+    // If it returns -1, that means it's a tie
+    // If it returns 1, that means the player won the round
     computerSelection = computerSelection.toLowerCase();
     playerSelection = playerSelection.toLowerCase();
-    console.log(`Computer played ${computerSelection}`);
-    console.log(`And the player played ${playerSelection}`);
+    document.querySelector('.playerChoice').textContent = `Player picked: ${playerSelection}`
+    document.querySelector('.computerChoice').textContent = `Computer picked: ${computerSelection}`;
+    const seperator = document.querySelector('.seperator');
+    if (seperator.children.length === 0) seperator.append(document.createElement('hr'));
     if (playerSelection === 'rock') {
         if (computerSelection === 'paper') {
-            console.log('You Lose! Paper beats Rock');
             return 0;
         }
         else if (computerSelection === 'scissors') {
-            console.log('You Win! Rock beats Scissors');
             return 1;
         }
         else {
-            console.log('Both played rock');
             return -1;
         }
     } else if (playerSelection === 'paper') {
         if (computerSelection === 'paper') {
-            console.log('Both played paper');
             return -1;
         }
         else if (computerSelection === 'scissors') {
-            console.log('You Lose! Scissors beats Paper');
             return 0;
         }
         else {
-            console.log('You Win! Paper beats Rock');
             return 1;
         }
     } else if (playerSelection === 'scissors') {
         if (computerSelection === 'paper') {
-            console.log('You Win! Scissors beats Paper');
             return 1;
         }
         else if (computerSelection === 'scissors') {
-            console.log('Both played scissors');
             return -1;
         }
         else {
-            console.log('You Lose! Rock beats Scissors');
             return 0;
         }
     }
 }
 
-function game() {
-    let computerScore = 0;
-    let playerScore = 0;
-
-    console.log('Game OVER!');
-    console.log('Final result:');
-    console.log('Player Score: ' + playerScore);
-    console.log('Computer Score: ' + computerScore);
-
-    console.log('The winner is: '
-        + (computerScore < playerScore
-            ? 'The Player'
-            : (computerScore > playerScore
-                ? 'La Computadora'
-                : 'It\'s a focking tie bruv')));
-
-
-}
-
-console.log('Okay bruv, \'ere we go')
-
 const playBtns = document.querySelectorAll('.selectionBtn');
 
 playBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-        play(`${this.id}`, getComputerChoice());
-    });
+    btn.addEventListener('click', game);
 });
+
+function game() {
+    if (computerScore >= 5 || playerScore >= 5) return;
+    const roundInfo = document.querySelector('.roundInfo');
+    const result = play(`${this.id}`, getComputerChoice());
+    switch (result) {
+        case -1:
+            roundInfo.textContent = 'It\'s a tie!';
+            roundInfo.style.backgroundColor = 'grey';
+            break;
+        case 0:
+            roundInfo.textContent = 'You lost this round!';
+            roundInfo.style.backgroundColor = 'red';
+            computerScore++;
+            document.querySelector('.compScore').textContent = `Computer Score: ${computerScore}`;
+            checkVictory();
+            break;
+        case 1:
+            roundInfo.textContent = 'You won this round!'
+            roundInfo.style.backgroundColor = 'green';
+            playerScore++;
+            document.querySelector('.playerScore').textContent = `Player Score: ${playerScore}`;
+            checkVictory();
+            break;
+        default:
+            break;
+    }
+}
+
+function checkVictory() {
+    const victoryDiv = document.querySelector('.victoryText');
+    if (computerScore >= 5) {
+        victoryDiv.textContent = 'Game Over! Computer Wins!';
+    } else if (playerScore >= 5) {
+        victoryDiv.textContent = 'Game Over! Player Wins!';
+    }
+}
